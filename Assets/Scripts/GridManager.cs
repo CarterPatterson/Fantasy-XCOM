@@ -134,19 +134,45 @@ public class GridManager : MonoBehaviour
 
     public void UpdateGrid()
     {
-        for(int i = 0; i < gridX; i++)
+        foreach(Cell c in grid)
         {
-            for(int j = 0; j < gridZ; j++)
-            {
-                grid[i, j].selectable = null;
-            }
+            c.selectable = null;
         }
 
         foreach(Selectable s in selector.selectables)
         {
-            FindNearestCell(new Vector2(s.transform.position.x, s.transform.position.z)).selectable = s;
-
+            Cell c = FindNearestCell(new Vector2(s.transform.position.x, s.transform.position.z));
+            c.selectable = s;
+            s.gridPos = new Vector2Int(Mathf.RoundToInt(c.pos.x / cellDims), Mathf.RoundToInt(c.pos.y / cellDims));
         }
+    }
+
+    public List<Vector2Int> GeneratePath(Vector2Int pos, Vector2Int destination)
+    {
+        if(pos == destination)
+        {
+            return null;
+        }
+
+        List<Cell> unvisited = new List<Cell>();
+
+        for(int i = 0; i < gridX; i++)
+        {
+            for(int j = 0; j < gridZ; j++)
+            {
+                unvisited.Add(grid[i, j]);
+            }
+        }
+
+
+
+
+
+        List<Vector2Int> path = new List<Vector2Int>();
+
+
+
+        return path;
     }
 
     private void OnDrawGizmos()
@@ -155,7 +181,5 @@ public class GridManager : MonoBehaviour
         {
             //Gizmos.DrawSphere(v, 0.1f);
         }
-
-
     }
 }
